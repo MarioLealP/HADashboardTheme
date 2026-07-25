@@ -1,0 +1,187 @@
+title: "ENDFIELD // TACTICAL DASHBOARD"
+views:
+  - type: sections
+    title: "OPERATIONS"
+    path: operations
+    icon: mdi:shield-outline
+    theme: Endfield Dark
+    sections:
+
+      # ── Section 01: Lighting & Power Control ──────────────────────
+      - type: grid
+        title: "[SEC.01] LIGHTING & POWER CONTROL"
+        cards:
+          - type: heading
+            heading: "LIGHTING & SWITCHES"
+            heading_style: title
+            card_mod:
+              style: |
+                ha-card {
+                  color: var(--primary-color) !important;
+                  letter-spacing: 1.5px !important;
+                  border-bottom: 2px solid var(--accent-color) !important;
+                  background: transparent !important;
+                  border: none !important;
+                }
+
+          - type: tile
+            entity: light.chandelure
+            name: "Chandelure Main Light"
+            icon: mdi:lightbulb-outline
+            features:
+              - type: toggle
+            card_mod:
+              style: |
+                ha-card {
+                  border-left: 4px solid #FFFA01 !important;
+                }
+
+          - type: tile
+            entity: light.chandelure
+            name: "Brightness Adjustment"
+            features:
+              - type: light-brightness
+            grid_options:
+              columns: 12
+              rows: 1
+
+          - type: tile
+            entity: light.chandelure
+            name: "Color Favorites"
+            features:
+              - type: light-color-favorites
+            grid_options:
+              columns: 12
+              rows: 2
+
+          - type: tile
+            entity: switch.shelf
+            name: "Shelf Power Switch"
+            icon: mdi:toggle-switch-outline
+            features:
+              - type: toggle
+            grid_options:
+              columns: 6
+              rows: 2
+
+          - type: tile
+            entity: switch.extraplug
+            name: "Auxiliary Plug"
+            icon: mdi:power-plug-outline
+            features:
+              - type: toggle
+            grid_options:
+              columns: 6
+              rows: 2
+
+          - type: tile
+            entity: sensor.shelf_energy
+            name: "Shelf Power Draw"
+            icon: mdi:flash-outline
+
+          - type: tile
+            entity: sensor.extraplug_energy
+            name: "Aux Power Draw"
+            icon: mdi:flash-outline
+
+      # ── Section 02: Air Quality & Environment ───────────────────
+      - type: grid
+        title: "[SEC.02] ATMOSPHERE & PURIFICATION"
+        cards:
+          - type: heading
+            heading: "AIR QUALITY CONTROL"
+            heading_style: title
+            card_mod:
+              style: |
+                ha-card {
+                  color: var(--primary-color) !important;
+                  letter-spacing: 1.5px !important;
+                  border-bottom: 2px solid var(--light-primary-color) !important;
+                  background: transparent !important;
+                  border: none !important;
+                }
+
+          - type: tile
+            entity: fan.core_300s_series
+            name: "Core 300S Air Purifier"
+            icon: mdi:air-purifier
+            features:
+              - type: fan-preset-modes
+            grid_options:
+              columns: 6
+              rows: 3
+
+          - type: tile
+            entity: sensor.core_300s_series_pm2_5
+            name: "PM2.5 Index"
+            icon: mdi:molecule-pm25
+            card_mod:
+              style: |
+                ha-card {
+                  border-left: 4px solid #00FF9A !important;
+                }
+
+          - type: tile
+            entity: sensor.core_300s_series_filter_lifetime
+            name: "Filter Life"
+            icon: mdi:filter-outline
+            features:
+              - type: bar-gauge
+
+          - type: statistics-graph
+            title: "PM2.5 Trend (7 Days)"
+            entities:
+              - sensor.core_300s_series_pm2_5
+            days_to_show: 7
+            period: day
+            chart_type: line
+            stat_types:
+              - mean
+              - min
+              - max
+            grid_options:
+              columns: 12
+              rows: 3
+
+      # ── Section 03: Atmospheric Forecast ─────────────────────────
+      - type: grid
+        title: "[SEC.03] ATMOSPHERIC METRICS"
+        cards:
+          - type: heading
+            heading: "WEATHER MONITORING"
+            heading_style: title
+            card_mod:
+              style: |
+                ha-card {
+                  color: var(--primary-color) !important;
+                  letter-spacing: 1.5px !important;
+                  border-bottom: 2px solid var(--primary-color) !important;
+                  background: transparent !important;
+                  border: none !important;
+                }
+
+          - show_current: true
+            show_forecast: false
+            type: weather-forecast
+            entity: weather.forecast_home
+            forecast_type: hourly
+            name: "Current Atmospheric Conditions"
+
+          - show_current: false
+            show_forecast: true
+            type: weather-forecast
+            entity: weather.forecast_home
+            forecast_type: hourly
+            name: "Hourly Projection"
+
+          - show_current: false
+            show_forecast: true
+            type: weather-forecast
+            entity: weather.forecast_home
+            forecast_type: daily
+            name: "Daily Outlook"
+
+    header:
+      layout: responsive
+      badges_position: bottom
+      badges_wrap: wrap

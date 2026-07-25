@@ -1,0 +1,100 @@
+Endfield Dark:
+  # ── Typography ──────────────────────────────────────────
+  primary-font-family: "'HarmonyOS Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+  paper-font-common-base_-_font-family: "var(--primary-font-family)"
+  paper-font-common-code_-_font-family: "'JetBrains Mono', 'Consolas', monospace"
+
+  # ── Core Backgrounds (The Industrial Canvas) ────────────
+  primary-background-color: "#0F0F0F"    # Deepest void for empty dashboard space
+  secondary-background-color: "#161616"  # Typst clr-darkest for sidebars and panels
+  card-background-color: "#191919"       # Solid dark panels for cards
+  ha-card-background: "var(--card-background-color)"
+  dialog-background-color: "#161616"
+  sidebar-background-color: "#111111"
+
+  # ── Accent Colors (Arknights: Endfield Palette) ──────────
+  primary-color: "#FFFA01"               # Endfield Yellow accent
+  accent-color: "#E5007F"                # Endfield Neon Magenta/Pink
+  light-primary-color: "#00FF9A"         # Endfield Tactical Green/Cyan
+
+  # ── Text Colors ─────────────────────────────────────────
+  primary-text-color: "#FCFCFC"          # Bright white for readability
+  secondary-text-color: "#D9D9D9"        # Typst clr-light
+  disabled-text-color: "#5C5C5C"         # Typst clr-dark
+  text-primary-color: "#0F0F0F"          # Text on bright yellow elements
+
+  # ── App Header ──────────────────────────────────────────
+  app-header-background-color: "#111111" # Top header bar
+  app-header-text-color: "#FFFA01"       # Yellow header title
+  app-header-selection-bar-color: "#FFFA01"
+
+  # ── Cards & Elements Structure ──────────────────────────
+  ha-card-border-radius: "2px"           # Sharp technical corners
+  ha-card-border-width: "1px"
+  ha-card-border-color: "#2A2A2A"        # Muted dark border structure
+  ha-card-box-shadow: "none"             # Clean industrial layout
+  divider-color: "#2E2E2E"               # Separator lines
+
+  # ── Toggles, Switches, and Sliders ──────────────────────
+  switch-checked-button-color: "#0F0F0F" # Dark knob inside active switch
+  switch-checked-track-color: "#FFFA01"  # Yellow track
+  switch-unchecked-button-color: "#5C5C5C"
+  switch-unchecked-track-color: "#222222"
+  slider-color: "#FFFA01"
+  slider-track-color: "#2A2A2A"
+
+  # ── System States & Indicators ──────────────────────────
+  state-icon-color: "#5C5C5C"            # Muted inactive icons
+  state-icon-active-color: "#FFFA01"     # Glowing yellow active icons
+  success-color: "#00FF9A"               # Endfield Green
+  warning-color: "#FFFA01"               # Endfield Yellow
+  error-color: "#E5007F"                 # Endfield Pink
+  info-color: "#1A6FBF"                  # Technical Blue
+
+  # ── Engine Override ─────────────────────────────────────
+  modes:
+    dark: {}
+
+  # ── Card-Mod Global Style Injection ─────────────────────
+  card-mod-theme: Endfield Dark
+  card-mod-root-yaml: |
+    .: |
+      ha-app-layout {
+        background-color: #0F0F0F !important;
+        background-image: radial-gradient(rgba(255, 250, 1, 0.03) 1px, transparent 0), url('/local/contour_map.svg') !important;
+        background-size: 24px 24px, cover !important;
+        background-position: center, center !important;
+        background-repeat: repeat, no-repeat !important;
+        background-attachment: fixed !important;
+      }
+
+  card-mod-card-yaml: |
+    $: |
+      ha-card {
+        position: relative !important;
+        border: 1px solid #2A2A2A !important;
+        border-left: 4px solid transparent !important;
+        border-image: linear-gradient(to bottom, transparent 10%, #E5007F 10%, #E5007F 26%, #00FF9A 26%, #00FF9A 42%, #FFFA01 42%, #FFFA01 90%, transparent 90%) 1 !important;
+        background: rgba(25, 25, 25, 0.92) !important;
+        backdrop-filter: blur(8px) !important;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+      ha-card:hover {
+        border-color: #5C5C5C !important;
+        box-shadow: 0 0 15px rgba(255, 250, 1, 0.12), inset 0 0 12px rgba(255, 250, 1, 0.03) !important;
+        transform: translateY(-1px);
+      }
+      /* Endfield corner bracket styling */
+      ha-card::before {
+        content: "[SYS]";
+        position: absolute;
+        top: 4px;
+        right: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        font-weight: 700;
+        color: #5C5C5C;
+        letter-spacing: 1px;
+        pointer-events: none;
+        opacity: 0.6;
+      }

@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ENDFIELD // Home Assistant Tactical Command</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="endfield-dark">
+    <!-- Tactical HUD Corner Brackets -->
+    <div class="hud-bracket top-left">┌</div>
+    <div class="hud-bracket top-right">┐</div>
+    <div class="hud-bracket bottom-left">└</div>
+    <div class="hud-bracket bottom-right">┘</div>
+
+    <!-- Endfield Bootup Loader -->
+    <div id="ef-loader" class="ef-loader-overlay">
+      <div class="loader-content">
+        <div class="loader-logo">EF</div>
+        <div class="loader-text">INITIALIZING PROTOCOL AUTOMATION-CORE...</div>
+        <div class="loader-sub">OVER THE FRONTIER, INTO THE FRONT</div>
+        <div class="loader-progress">
+          <div class="loader-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Technical Header / Accent Bar -->
+    <header class="endfield-header">
+      <div class="accent-stripe">
+        <div class="stripe-pink"></div>
+        <div class="stripe-green"></div>
+        <div class="stripe-yellow"></div>
+      </div>
+
+      <div class="header-content">
+        <div class="brand-group">
+          <div class="logo-box">
+            <span class="logo-text">EF</span>
+          </div>
+          <div class="brand-titles">
+            <h1 class="brand-title">
+              ENDFIELD <span class="brand-sub">INDUSTRIES</span>
+            </h1>
+            <div class="brand-spec">
+              ENDMINISTRATOR COMMAND DASHBOARD // OS.v3.8
+            </div>
+          </div>
+        </div>
+
+        <div class="header-center-info">
+          <div class="sys-status-pill">
+            <span class="status-dot pulsing"></span>
+            <span class="status-text" id="connection-status-text"
+              >SYSTEM ONLINE (MOCK MODE)</span
+            >
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <div class="clock-display">
+            <span id="live-time" class="time-main">00:00:00</span>
+            <span id="live-date" class="date-sub">2026-07-25</span>
+          </div>
+          <button
+            id="ha-config-btn"
+            class="tech-btn"
+            title="Configure Home Assistant Connection"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="3"></circle>
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+              ></path>
+            </svg>
+            <span class="btn-text">HA CONNECT</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Background SVG Map Overlay -->
+    <div class="contour-bg-container">
+      <img
+        src="contour_map.svg"
+        alt="Topographic Contour Grid"
+        class="contour-bg-img"
+      />
+      <div class="grid-scanlines"></div>
+    </div>
+
+    <!-- Main Content Layout -->
+    <main class="endfield-dashboard-grid">
+      <!-- Section 1: Light & Power -->
+      <section class="dashboard-section" id="sec-lighting">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <span class="sec-index">[SEC.01]</span>
+            <h2 class="sec-title">LIGHTING & POWER CONTROL</h2>
+          </div>
+          <div class="sec-tag">WULING_AIC_HUB</div>
+        </div>
+
+        <div class="cards-grid">
+          <!-- Main Chandelure Light Tile -->
+          <article
+            class="ef-card light-control-card"
+            data-entity="light.chandelure"
+          >
+            <div class="ef-accent-bar">
+              <div class="bar-pink"></div>
+              <div class="bar-green"></div>
+              <div class="bar-yellow"></div>
+            </div>
+            <div class="card-inner">
+              <div class="card-top">
+                <div class="icon-box">
+                  <svg class="entity-icon" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M12 2A7 7 0 0 0 5 9C5 11.38 6.19 13.47 8 14.74V17A1 1 0 0 0 9 18H15A1 1 0 0 0 16 17V14.74C17.81 13.47 19 11.38 19 9A7 7 0 0 0 12 2M9 21A1 1 0 0 0 10 22H14A1 1 0 0 0 15 21V20H9V21Z"
+                    />
+                  </svg>
+                </div>
+                <div class="entity-info">
+                  <div class="entity-name">Chandelure Main Light</div>
+                  <div class="entity-id">light.chandelure</div>
+                </div>
+                <label class="ef-switch">
+                  <input type="checkbox" id="toggle-chandelure" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="card-controls">
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <span>BRIGHTNESS</span>
+                    <span class="slider-val" id="val-chandelure-bright"
+                      >85%</span
+                    >
+                  </div>
+                  <input
+                    type="range"
+                    class="ef-range"
+                    id="range-chandelure-bright"
+                    min="0"
+                    max="100"
+                    value="85"
+                  />
+                </div>
+
+                <div class="color-presets">
+                  <span class="preset-label">FAVORITES:</span>
+                  <button
+                    class="color-dot active"
+                    style="background: #fffa01"
+                    data-color="#FFFA01"
+                    title="Endfield Yellow"
+                  ></button>
+                  <button
+                    class="color-dot"
+                    style="background: #fff1c5"
+                    data-color="#FFF1C5"
+                    title="Warm Light"
+                  ></button>
+                  <button
+                    class="color-dot"
+                    style="background: #e5007f"
+                    data-color="#E5007F"
+                    title="Tactical Pink"
+                  ></button>
+                  <button
+                    class="color-dot"
+                    style="background: #00ff9a"
+                    data-color="#00FF9A"
+                    title="Cyan Glow"
+                  ></button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Shelf Switch Tile -->
+          <article class="ef-card switch-card" data-entity="switch.shelf">
+            <div class="ef-accent-bar">
+              <div class="bar-pink"></div>
+              <div class="bar-green"></div>
+              <div class="bar-yellow"></div>
+            </div>
+            <div class="card-inner">
+              <div class="card-top">
+                <div class="icon-box">
+                  <svg class="entity-icon" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M17 7H7A5 5 0 0 0 2 12A5 5 0 0 0 7 17H17A5 5 0 0 0 22 12A5 5 0 0 0 17 7M7 15A3 3 0 0 1 4 12A3 3 0 0 1 7 9A3 3 0 0 1 10 12A3 3 0 0 1 7 15Z"
+                    />
+                  </svg>
+                </div>
+                <div class="entity-info">
+                  <div class="entity-name">Shelf Power Switch</div>
+                  <div class="entity-id">switch.shelf</div>
+                </div>
+                <label class="ef-switch">
+                  <input type="checkbox" id="toggle-shelf" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="card-sensor-row">
+                <span class="sensor-label">LIVE CONSUMPTION:</span>
+                <span class="sensor-value" id="val-shelf-energy">42.8 W</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Extra Plug Switch Tile -->
+          <article class="ef-card switch-card" data-entity="switch.extraplug">
+            <div class="ef-accent-bar">
+              <div class="bar-pink"></div>
+              <div class="bar-green"></div>
+              <div class="bar-yellow"></div>
+            </div>
+            <div class="card-inner">
+              <div class="card-top">
+                <div class="icon-box">
+                  <svg class="entity-icon" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M16 7V3H14V7H10V3H8V7H7A2 2 0 0 0 5 9V14.5L8.5 18V21H15.5V18L19 14.5V9A2 2 0 0 0 17 7H16Z"
+                    />
+                  </svg>
+                </div>
+                <div class="entity-info">
+                  <div class="entity-name">Auxiliary Plug</div>
+                  <div class="entity-id">switch.extraplug</div>
+                </div>
+                <label class="ef-switch">
+                  <input type="checkbox" id="toggle-extraplug" />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="card-sensor-row">
+                <span class="sensor-label">LIVE CONSUMPTION:</span>
+                <span class="sensor-value" id="val-extraplug-energy"
+                  >0.0 W</span
+                >
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 2: Air Quality -->
+      <section class="dashboard-section" id="sec-air">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <span class="sec-index">[SEC.02]</span>
+            <h2 class="sec-title">AIR QUALITY & ATMOSPHERE</h2>
+          </div>
+          <div class="sec-tag">PROTOCOL_CORE</div>
+        </div>
+
+        <div class="cards-grid">
+          <!-- Fan Purifier Control -->
+          <article class="ef-card fan-card" data-entity="fan.core_300s_series">
+            <div class="ef-accent-bar">
+              <div class="bar-pink"></div>
+              <div class="bar-green"></div>
+              <div class="bar-yellow"></div>
+            </div>
+            <div class="card-inner">
+              <div class="card-top">
+                <div class="icon-box fan-icon-anim">
+                  <svg class="entity-icon" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M12,11A1,1 0 0,0 11,12A1,1 0 0,0 12,13A1,1 0 0,0 13,12A1,1 0 0,0 12,11M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4Z"
+                    />
+                  </svg>
+                </div>
+                <div class="entity-info">
+                  <div class="entity-name">Core 300S Air Purifier</div>
+                  <div class="entity-id">fan.core_300s_series</div>
+                </div>
+                <label class="ef-switch">
+                  <input type="checkbox" id="toggle-fan" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="preset-modes">
+                <span class="preset-label">PRESET MODE:</span>
+                <div class="mode-buttons">
+                  <button class="mode-btn active" data-mode="auto">AUTO</button>
+                  <button class="mode-btn" data-mode="sleep">SLEEP</button>
+                  <button class="mode-btn" data-mode="favorite">MAX</button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- PM2.5 Meter & Gauge -->
+          <article
+            class="ef-card sensor-card"
+            data-entity="sensor.core_300s_series_pm2_5"
+          >
+            <div class="ef-accent-bar">
+              <div class="bar-pink"></div>
+              <div class="bar-green"></div>
+              <div class="bar-yellow"></div>
+            </div>
+            <div class="card-inner">
+              <div class="card-top">
+                <div class="icon-box text-green">
+                  <svg class="entity-icon" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"
+                    />
+                  </svg>
+                </div>
+                <div class="entity-info">
+                  <div class="entity-name">PM 2.5 Index</div>
+                  <div class="entity-id">sensor.core_300s_series_pm2_5</div>
+                </div>
+                <div class="tech-badge badge-good">OPTIMAL</div>
+              </div>
+
+              <div class="metric-display">
+                <span class="metric-big" id="val-pm25">8</span>
+                <span class="metric-unit">µg/m³</span>
+              </div>
+
+              <!-- PM2.5 History Mini Sparkline SVG -->
+              <div class="sparkline-wrap">
+                <svg class="sparkline-chart" viewBox="0 0 200 40">
+                  <defs>
+                    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="0%"
+                        stop-color="#00FF9A"
+                        stop-opacity="0.4"
+                      />
+                      <stop
+                        offset="100%"
+                        stop-color="#00FF9A"
+                        stop-opacity="0"
+                      />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M0,35 Q30,25 60,30 T120,15 T180,22 L200,10 L200,40 L0,40 Z"
+                    fill="url(#chartGrad)"
+                  />
+                  <path
+                    d="M0,35 Q30,25 60,30 T120,15 T180,22 L200,10"
+                    fill="none"
+                    stroke="#00FF9A"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
+            </div>
+          </article>
+
+          <!-- Filter Lifetime Gauge -->
+          <article
+            class="ef-card gauge-card"
+            data-entity="sensor.core_300s_series_filter_lifetime"
+          >
+            <div class="ef-accent-bar">
+              <div class="bar-pink"></div>
+              <div class="bar-green"></div>
+              <div class="bar-yellow"></div>
+            </div>
+            <div class="card-inner">
+              <div class="card-top">
+                <div class="icon-box">
+                  <svg class="entity-icon" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4Z"
+                    />
+                  </svg>
+                </div>
+                <div class="entity-info">
+                  <div class="entity-name">Filter Lifetime Remaining</div>
+                  <div class="entity-id">sensor.filter_lifetime</div>
+                </div>
+              </div>
+
+              <div class="progress-bar-container">
+                <div class="progress-info">
+                  <span>HEALTH STATUS</span>
+                  <span class="progress-pct" id="val-filter-pct">82%</span>
+                </div>
+                <div class="progress-track">
+                  <div
+                    class="progress-fill"
+                    id="bar-filter-fill"
+                    style="width: 82%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 3: Weather Forecast -->
+      <section class="dashboard-section" id="sec-weather">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <span class="sec-index">[SEC.03]</span>
+            <h2 class="sec-title">ATMOSPHERIC METRICS & FORECAST</h2>
+          </div>
+          <div class="sec-tag">TIANSHI_OBSERVATORY</div>
+        </div>
+
+        <div class="cards-grid weather-grid-layout">
+          <!-- Current Weather Overview -->
+          <article
+            class="ef-card weather-main-card"
+            data-entity="weather.forecast_home"
+          >
+            <div class="ef-accent-bar">
+              <div class="bar-pink"></div>
+              <div class="bar-green"></div>
+              <div class="bar-yellow"></div>
+            </div>
+            <div class="card-inner">
+              <div class="weather-primary-row">
+                <div class="weather-icon-large">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="56"
+                    height="56"
+                    fill="#FFFA01"
+                  >
+                    <path
+                      d="M12,6.5A5.5,5.5 0 0,1 17.5,12A5.5,5.5 0 0,1 12,17.5A5.5,5.5 0 0,1 6.5,12A5.5,5.5 0 0,1 12,6.5M12,2A1,1 0 0,1 13,3V4A1,1 0 0,1 12,5A1,1 0 0,1 11,4V3A1,1 0 0,1 12,2M12,19A1,1 0 0,1 13,20V21A1,1 0 0,1 12,22A1,1 0 0,1 11,21V20A1,1 0 0,1 12,19M4,11H3A1,1 0 0,1 2,12A1,1 0 0,1 3,13H4A1,1 0 0,1 5,12A1,1 0 0,1 4,11M21,11H20A1,1 0 0,1 19,12A1,1 0 0,1 20,13H21A1,1 0 0,1 22,12A1,1 0 0,1 21,11Z"
+                    />
+                  </svg>
+                </div>
+                <div class="weather-temp-wrap">
+                  <span class="weather-temp" id="val-weather-temp">24.5°C</span>
+                  <span class="weather-state" id="val-weather-state"
+                    >Partly Cloudy</span
+                  >
+                </div>
+                <div class="weather-sub-metrics">
+                  <div class="sub-metric">
+                    <span class="sub-label">HUMIDITY</span>
+                    <span class="sub-val" id="val-humidity">58%</span>
+                  </div>
+                  <div class="sub-metric">
+                    <span class="sub-label">WIND</span>
+                    <span class="sub-val" id="val-wind">14 km/h</span>
+                  </div>
+                  <div class="sub-metric">
+                    <span class="sub-label">PRESSURE</span>
+                    <span class="sub-val">1014 hPa</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="forecast-divider">HOURLY & DAILY PREDICTION</div>
+
+              <!-- Forecast Mini Horizontal Cards -->
+              <div class="forecast-list">
+                <div class="forecast-item">
+                  <span class="fc-time">12:00</span>
+                  <span class="fc-icon">☀️</span>
+                  <span class="fc-temp">25°</span>
+                </div>
+                <div class="forecast-item">
+                  <span class="fc-time">15:00</span>
+                  <span class="fc-icon">⛅</span>
+                  <span class="fc-temp">26°</span>
+                </div>
+                <div class="forecast-item">
+                  <span class="fc-time">18:00</span>
+                  <span class="fc-icon">🌤️</span>
+                  <span class="fc-temp">23°</span>
+                </div>
+                <div class="forecast-item">
+                  <span class="fc-time">21:00</span>
+                  <span class="fc-icon">🌙</span>
+                  <span class="fc-temp">19°</span>
+                </div>
+                <div class="forecast-item">
+                  <span class="fc-time">Tomorrow</span>
+                  <span class="fc-icon">🌧️</span>
+                  <span class="fc-temp">18° / 22°</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- HA WebSocket Connection Modal -->
+    <div id="ha-modal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>CONNECT HOME ASSISTANT</h3>
+          <button id="modal-close" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc">
+            Enter your Home Assistant instance URL and Long-Lived Access Token
+            to establish a live WebSocket connection.
+          </p>
+
+          <div class="form-group">
+            <label for="ha-url-input">HOME ASSISTANT HOST / URL</label>
+            <input
+              type="text"
+              id="ha-url-input"
+              class="tech-input"
+              placeholder="http://homeassistant.local:8123 or IP"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="ha-token-input">LONG-LIVED ACCESS TOKEN</label>
+            <input
+              type="password"
+              id="ha-token-input"
+              class="tech-input"
+              placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+            />
+          </div>
+
+          <div class="form-actions">
+            <button id="save-ha-config" class="tech-btn primary-btn">
+              CONNECT WEBSOCKET
+            </button>
+            <button id="use-mock-mode" class="tech-btn">
+              USE OFFLINE DEMO MODE
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
