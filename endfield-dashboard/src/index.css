@@ -3,27 +3,58 @@
    Inspired by Arknights: Endfield visual language & lib.typ
    ───────────────────────────────────────────────────────────── */
 
+@font-face {
+  font-family: "SDK-Sans-Regular";
+  src: url(https://web-static.hg-cdn.com/gl_web_sdk/assets/SourceHanSans-Regular.a3fa7030779f47fa5b5f.woff) format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "SDK-Sans-Bold";
+  src: url(https://web-static.hg-cdn.com/gl_web_sdk/assets/SourceHanSans-Bold.70a158c7edb8c734e449.woff) format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Novecentosanswide-Bold";
+  src: url(https://web-static.hg-cdn.com/endfield/official-v4/_next/static/media/Novecentosanswide-Bold.woff2) format("woff2");
+  font-weight: bold;
+}
+
 :root {
-  --clr-bg-void: #0F0F0F;
+  --clr-bg-void: #101010;
   --clr-card-bg: rgba(25, 25, 25, 0.92);
   --clr-card-border: #2A2A2A;
-  --clr-card-hover-border: #5C5C5C;
+  --clr-card-hover-border: #fffa00;
   
   /* Endfield Signature Accent Colors */
-  --clr-primary: #FFFA01;   /* Endfield Yellow */
+  --clr-primary: #fffa00;   /* Endfield Neon Yellow */
   --clr-pink: #E5007F;      /* Tactical Pink */
   --clr-green: #00FF9A;     /* Cyber Cyan / Green */
   --clr-link: #1A6FBF;      /* Industrial Blue */
   
   /* Muted Monochromes */
-  --clr-text-white: #FCFCFC;
-  --clr-text-light: #D9D9D9;
-  --clr-text-muted: #5C5C5C;
-  --clr-text-dark: #0F0F0F;
+  --clr-text-white: #ffffff;
+  --clr-text-light: #f2f2f2;
+  --clr-text-muted: #6e6e6e;
+  --clr-text-dark: #101010;
 
   /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'SDK-Sans-Regular', 'Inter', sans-serif;
+  --font-bold: 'SDK-Sans-Bold', 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+  --font-display: 'Novecentosanswide-Bold', sans-serif;
+}
+
+/* Endfield Patterns */
+.bg-dot-matrix {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 1.5em 1.5em;
+}
+
+.bg-hazard-stripes {
+  background-image: linear-gradient(-45deg, transparent, transparent 18.3%, rgba(255, 250, 0, 0.1) 0, rgba(255, 250, 0, 0.1) 31.6%, transparent 0, transparent 68.3%, rgba(255, 250, 0, 0.1) 0, rgba(255, 250, 0, 0.1) 81.6%, transparent 0, transparent);
+  background-size: 0.5rem 0.5rem;
 }
 
 * {
@@ -363,17 +394,20 @@ body.endfield-dark {
 }
 
 .sec-index {
-  font-family: var(--font-mono);
   color: var(--clr-primary);
-  font-weight: 700;
-  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
 }
 
 .sec-title {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
+  font-size: 16px;
+  font-family: var(--font-bold);
+  letter-spacing: 1.5px;
   color: var(--clr-text-white);
+  text-transform: uppercase;
 }
 
 .sec-tag {
@@ -429,11 +463,23 @@ body.endfield-dark {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  transition: all 0.3s ease;
 }
 
-.bar-pink { height: 18%; background: var(--clr-pink); }
-.bar-green { height: 18%; background: var(--clr-green); }
-.bar-yellow { flex: 1; background: var(--clr-primary); }
+.ef-accent-bar.active {
+  background: var(--clr-primary);
+  box-shadow: 0 0 10px rgba(255, 250, 0, 0.4);
+}
+
+.ef-accent-bar:not(.active) .bar-pink { height: 18%; background: var(--clr-pink); }
+.ef-accent-bar:not(.active) .bar-green { height: 18%; background: var(--clr-green); }
+.ef-accent-bar:not(.active) .bar-yellow { flex: 1; background: var(--clr-primary); }
+
+.ef-accent-bar.active .bar-pink,
+.ef-accent-bar.active .bar-green,
+.ef-accent-bar.active .bar-yellow {
+  display: none;
+}
 
 .card-inner {
   flex: 1;
@@ -471,8 +517,8 @@ body.endfield-dark {
 }
 
 .entity-name {
+  font-family: var(--font-bold);
   font-size: 14px;
-  font-weight: 600;
   color: var(--clr-text-white);
 }
 
@@ -798,8 +844,142 @@ input:checked + .slider:before {
   font-size: 10px;
   color: var(--clr-text-muted);
   letter-spacing: 1px;
-  border-bottom: 1px dashed #333;
-  padding-bottom: 4px;
+  margin: 16px 0;
+  border-bottom: 1px solid var(--clr-card-border);
+  line-height: 0.1em;
+}
+
+.forecast-divider span {
+  background: var(--clr-card-bg);
+  padding: 0 10px;
+}
+
+.hourly-forecast-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding-bottom: 8px;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hourly-forecast-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hourly-item {
+  flex: 0 0 65px;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  cursor: grab;
+  position: relative;
+}
+
+.hourly-item:active {
+  cursor: grabbing;
+}
+
+.hourly-item:hover {
+  background: rgba(255, 250, 0, 0.05);
+}
+
+.h-time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--clr-text-light);
+  white-space: nowrap;
+}
+
+.h-temp {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--clr-text-white);
+}
+
+.weather-forecast-grid {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  justify-content: space-between;
+}
+
+.forecast-day {
+  flex: 1;
+  background: rgba(20, 20, 20, 0.6);
+  border: 1px solid #333;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.forecast-day:hover {
+  background: rgba(255, 250, 0, 0.05);
+  border-color: var(--clr-primary);
+  transform: translateY(-2px);
+}
+
+.forecast-day::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 2px;
+  background: var(--clr-card-border);
+  transition: all 0.2s ease;
+}
+
+.forecast-day:hover::before {
+  background: var(--clr-primary);
+}
+
+.f-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--clr-text-light);
+}
+
+.f-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--clr-primary);
+  margin: 2px 0;
+}
+
+.f-temp-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.f-temp-high {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--clr-text-white);
+}
+
+.f-temp-low {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--clr-text-muted);
+}
+
+.f-condition {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--clr-text-muted);
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .forecast-list {
