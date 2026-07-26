@@ -10,6 +10,7 @@ export const BootLoader: React.FC<Props> = ({ loading }) => {
     <div
       id="ef-loader"
       className={`ef-loader-overlay ${!loading ? "fade-out" : ""}`}
+      style={{ pointerEvents: loading ? "auto" : "none" }}
     >
       <div className="loader-content">
         <div

@@ -1,4 +1,5 @@
 import type React from "react";
+import { useState } from "react";
 import { ENTITY } from "../../constants";
 import type { HAServiceData, HAStatesMap } from "../../models/ha";
 import { IconGameplay } from "../icons/icons";
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export const LightingSection: React.FC<Props> = ({ states, callHAService }) => {
+  const [dragBrightness, setDragBrightness] = useState<number | null>(null);
   return (
     <section className="dashboard-section" id="sec-lighting">
       <div className="section-header bg-hazard-stripes">
@@ -70,12 +72,16 @@ export const LightingSection: React.FC<Props> = ({ states, callHAService }) => {
                 <div className="slider-header">
                   <span>BRIGHTNESS</span>
                   <span className="slider-val">
-                    {Math.round(
-                      ((states[ENTITY.MAIN_LIGHT]?.attributes?.brightness ||
-                        0) /
-                        255) *
-                        100,
-                    )}
+                    {dragBrightness !== null
+                      ? dragBrightness
+                      : Math.round(
+                          (Number(
+                            states[ENTITY.MAIN_LIGHT]?.attributes?.brightness ||
+                              0,
+                          ) /
+                            255) *
+                            100,
+                        )}
                     %
                   </span>
                 </div>
@@ -84,18 +90,38 @@ export const LightingSection: React.FC<Props> = ({ states, callHAService }) => {
                   className="ef-range"
                   min="0"
                   max="100"
-                  value={Math.round(
-                    ((states[ENTITY.MAIN_LIGHT]?.attributes?.brightness || 0) /
-                      255) *
-                      100,
-                  )}
-                  onChange={(e) => {
-                    const val = parseInt(e.target.value, 10);
+                  value={
+                    dragBrightness !== null
+                      ? dragBrightness
+                      : Math.round(
+                          (Number(
+                            states[ENTITY.MAIN_LIGHT]?.attributes?.brightness ||
+                              0,
+                          ) /
+                            255) *
+                            100,
+                        )
+                  }
+                  onChange={(e) =>
+                    setDragBrightness(parseInt(e.target.value, 10))
+                  }
+                  onMouseUp={(e) => {
+                    const val = parseInt(e.currentTarget.value, 10);
                     const bright255 = Math.round((val / 100) * 255);
                     callHAService("light", "turn_on", {
                       entity_id: ENTITY.MAIN_LIGHT,
                       brightness: bright255,
                     });
+                    setDragBrightness(null);
+                  }}
+                  onTouchEnd={(e) => {
+                    const val = parseInt(e.currentTarget.value, 10);
+                    const bright255 = Math.round((val / 100) * 255);
+                    callHAService("light", "turn_on", {
+                      entity_id: ENTITY.MAIN_LIGHT,
+                      brightness: bright255,
+                    });
+                    setDragBrightness(null);
                   }}
                 />
               </div>
@@ -115,7 +141,7 @@ export const LightingSection: React.FC<Props> = ({ states, callHAService }) => {
             <div className="card-top">
               <div className="icon-box">
                 <svg className="entity-icon" viewBox="0 0 24 24">
-                  <title>Light</title>
+                  <title>Switch</title>
                   <path
                     fill="currentColor"
                     d="M17 7H7A5 5 0 0 0 2 12A5 5 0 0 0 7 17H17A5 5 0 0 0 22 12A5 5 0 0 0 17 7M7 15A3 3 0 0 1 4 12A3 3 0 0 1 7 9A3 3 0 0 1 10 12A3 3 0 0 1 7 15Z"
@@ -163,7 +189,7 @@ export const LightingSection: React.FC<Props> = ({ states, callHAService }) => {
             <div className="card-top">
               <div className="icon-box">
                 <svg className="entity-icon" viewBox="0 0 24 24">
-                  <title>Light</title>
+                  <title>Plug</title>
                   <path
                     fill="currentColor"
                     d="M16 7V3H14V7H10V3H8V7H7A2 2 0 0 0 5 9V14.5L8.5 18V21H15.5V18L19 14.5V9A2 2 0 0 0 17 7H16Z"

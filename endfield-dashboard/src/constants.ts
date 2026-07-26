@@ -8,12 +8,14 @@ export const ENTITY = {
   PM25: import.meta.env.VITE_ENTITY_PM25 || "sensor.core_300s_pm2_5",
   FILTER: import.meta.env.VITE_ENTITY_FILTER || "sensor.filter",
   WEATHER: import.meta.env.VITE_ENTITY_WEATHER || "weather.home",
-  CALENDARS: [
-    "calendar.local_de_trabalho",
-    "calendar.lealmariop_gmail_com",
-    "calendar.lealmario47_gmail_com",
-    "calendar.feriados_em_portugal",
-    "calendar.aniversarios",
-  ],
+  CALENDARS: import.meta.env.VITE_ENTITY_CALENDARS
+    ? import.meta.env.VITE_ENTITY_CALENDARS.split(",")
+    : [
+        "calendar.local_de_trabalho",
+        "calendar.lealmariop_gmail_com",
+        "calendar.lealmario47_gmail_com",
+        "calendar.feriados_em_portugal",
+        "calendar.aniversarios",
+      ],
   SPOTIFY: import.meta.env.VITE_ENTITY_SPOTIFY || "media_player.spotify",
 };

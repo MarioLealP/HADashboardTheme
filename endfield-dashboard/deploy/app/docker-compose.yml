@@ -1,0 +1,17 @@
+services:
+  endfield-dashboard-web:
+    image: localhost:5000/endfield-dashboard:latest
+    container_name: endfield-dashboard-web
+    restart: unless-stopped
+    ports:
+      - "8081:80" # Uses 8081 so Cosmos Cloud reverse proxy can use port 80/443 without conflict
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: endfield-watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 60 --label-enable --cleanup

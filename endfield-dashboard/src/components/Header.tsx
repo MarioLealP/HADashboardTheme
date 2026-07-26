@@ -44,6 +44,16 @@ const NextIcon = () => (
   </svg>
 );
 
+const spBtnStyle: React.CSSProperties = {
+  cursor: "pointer",
+  display: "flex",
+  alignItems: "center",
+  padding: "6px 10px",
+  background: "none",
+  border: "none",
+  color: "inherit",
+};
+
 export const Header: React.FC<Props> = ({
   connected,
   statusMsg,
@@ -118,10 +128,10 @@ export const Header: React.FC<Props> = ({
         <div
           className="spotify-header-position"
           style={{
-            position: "absolute",
-            left: "74%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
+            display: "flex",
+            alignItems: "center",
+            marginLeft: "auto",
+            marginRight: "32px",
             zIndex: 5,
           }}
         >
@@ -189,15 +199,7 @@ export const Header: React.FC<Props> = ({
                         entity_id: ENTITY.SPOTIFY,
                       })
                     }
-                    style={{
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      padding: "6px 10px",
-                      background: "none",
-                      border: "none",
-                      color: "inherit",
-                    }}
+                    style={spBtnStyle}
                   >
                     <PrevIcon />
                   </button>
@@ -208,15 +210,7 @@ export const Header: React.FC<Props> = ({
                         entity_id: ENTITY.SPOTIFY,
                       })
                     }
-                    style={{
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      padding: "6px 10px",
-                      background: "none",
-                      border: "none",
-                      color: "inherit",
-                    }}
+                    style={spBtnStyle}
                   >
                     {isPlaying ? <PauseIcon /> : <PlayIcon />}
                   </button>
@@ -227,15 +221,7 @@ export const Header: React.FC<Props> = ({
                         entity_id: ENTITY.SPOTIFY,
                       })
                     }
-                    style={{
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      padding: "6px 10px",
-                      background: "none",
-                      border: "none",
-                      color: "inherit",
-                    }}
+                    style={spBtnStyle}
                   >
                     <NextIcon />
                   </button>

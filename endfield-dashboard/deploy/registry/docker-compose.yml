@@ -1,0 +1,14 @@
+services:
+  registry:
+    image: registry:2
+    container_name: endfield-artifact-registry
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - registry_data:/var/lib/registry
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
+
+volumes:
+  registry_data:

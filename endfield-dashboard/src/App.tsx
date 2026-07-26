@@ -8,11 +8,11 @@ import { CalendarSection } from "./components/sections/CalendarSection";
 import { LightingSection } from "./components/sections/LightingSection";
 import { WeatherSection } from "./components/sections/WeatherSection";
 import { ENTITY } from "./constants";
-import type {
-  HAEntityState,
-  HAServiceData,
-  HAStateChangedEvent,
-  HAStatesMap,
+import {
+  HAEntityStateSchema,
+  type HAServiceData,
+  type HAStateChangedEvent,
+  type HAStatesMap,
 } from "./models/ha";
 
 function App() {
@@ -30,6 +30,7 @@ function App() {
   );
 
   const wsRef = useRef<WebSocket | null>(null);
+  const msgIdRef = useRef(100);
 
   // Initial Bootup Loader State
   const [loading, setLoading] = useState(true);
@@ -70,14 +71,18 @@ function App() {
     ) {
       connectWebSocket(haUrl, haToken);
     }
-  }, []);
+  }, [haUrl, haToken]);
 
   const connectWebSocket = (url: string, token: string) => {
     if (wsRef.current) {
       wsRef.current.close();
     }
 
-    let wsUrl = url.replace(/^http/, "ws");
+    let fullUrl = url;
+    if (!/^https?:\/\//i.test(fullUrl)) {
+      fullUrl = `http://${fullUrl}`;
+    }
+    let wsUrl = fullUrl.replace(/^http/i, "ws");
     if (!wsUrl.endsWith("/api/websocket")) {
       wsUrl = `${wsUrl.replace(/\/$/, "")}/api/websocket`;
     }
@@ -126,9 +131,14 @@ function App() {
         } else if (msg.id === 1 && msg.type === "result" && msg.success) {
           // Handle initial states
           const initialStates: HAStatesMap = {};
-          msg.result.forEach((entity: HAEntityState) => {
-            initialStates[entity.entity_id] = entity;
-          });
+          if (Array.isArray(msg.result)) {
+            msg.result.forEach((rawEntity: unknown) => {
+              const parsed = HAEntityStateSchema.safeParse(rawEntity);
+              if (parsed.success) {
+                initialStates[parsed.data.entity_id] = parsed.data;
+              }
+            });
+          }
           setStates(initialStates);
         } else if (
           msg.type === "event" &&
@@ -172,9 +182,10 @@ function App() {
     serviceData: HAServiceData,
   ) => {
     if (connected && wsRef.current) {
+      msgIdRef.current += 1;
       wsRef.current.send(
         JSON.stringify({
-          id: Date.now(),
+          id: msgIdRef.current,
           type: "call_service",
           domain: domain,
           service: service,

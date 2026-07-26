@@ -36,8 +36,15 @@ export const HAEntityAttributesSchema = z
     media_duration: z.number().optional(),
     media_position: z.number().optional(),
     media_position_updated_at: z.string().optional(),
+    message: z.string().optional(),
+    description: z.string().optional(),
+    start_time: z.string().optional(),
+    end_time: z.string().optional(),
+    all_day: z.boolean().optional(),
+    rgb_color: z.array(z.number()).optional(),
+    brightness: z.number().optional(),
   })
-  .catchall(z.unknown());
+  .passthrough();
 
 export const HAEntityStateSchema = z.object({
   entity_id: z.string(),

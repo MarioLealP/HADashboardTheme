@@ -8,6 +8,38 @@ interface Props {
   states: HAStatesMap;
 }
 
+const WeatherConditionIcon: React.FC<{
+  condition: string;
+  title: string;
+  style?: React.CSSProperties;
+}> = ({ condition, title, style }) => (
+  <svg
+    className="f-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={style || { width: "20px", height: "20px" }}
+  >
+    <title>{title}</title>
+    {condition.includes("rain") ? (
+      <>
+        <path d="M7 16a4 4 0 0 1-.88-7.9 6 6 0 0 1 11.76 0A4 4 0 0 1 17 16H7z" />
+        <path d="M8 19v2m4-2v2m4-2v2" />
+      </>
+    ) : condition.includes("cloud") ? (
+      <path d="M7 16a4 4 0 0 1-.88-7.9 6 6 0 0 1 11.76 0A4 4 0 0 1 17 16H7z" />
+    ) : (
+      <>
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41M19.07 19.07l-1.41-1.41M6.34 6.34L4.93 4.93" />
+      </>
+    )}
+  </svg>
+);
+
 export const WeatherSection: React.FC<Props> = ({ states }) => {
   const hourlyScrollRef = useRef<HTMLDivElement>(null);
   const [isDraggingHourly, setIsDraggingHourly] = useState(false);
@@ -161,7 +193,7 @@ export const WeatherSection: React.FC<Props> = ({ states }) => {
                         .toUpperCase();
                       return (
                         <div
-                          key={i}
+                          key={day.datetime || i}
                           className="forecast-day"
                           style={{
                             padding: "6px",
@@ -172,31 +204,10 @@ export const WeatherSection: React.FC<Props> = ({ states }) => {
                           <div className="f-date" style={{ fontSize: "10px" }}>
                             {dayName}
                           </div>
-                          <svg
-                            className="f-icon"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            style={{ width: "20px", height: "20px" }}
-                          >
-                            <title>Forecast</title>
-                            {day.condition.includes("rain") ? (
-                              <>
-                                <path d="M7 16a4 4 0 0 1-.88-7.9 6 6 0 0 1 11.76 0A4 4 0 0 1 17 16H7z" />
-                                <path d="M8 19v2m4-2v2m4-2v2" />
-                              </>
-                            ) : day.condition.includes("cloud") ? (
-                              <path d="M7 16a4 4 0 0 1-.88-7.9 6 6 0 0 1 11.76 0A4 4 0 0 1 17 16H7z" />
-                            ) : (
-                              <>
-                                <circle cx="12" cy="12" r="4" />
-                                <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41M19.07 19.07l-1.41-1.41M6.34 6.34L4.93 4.93" />
-                              </>
-                            )}
-                          </svg>
+                          <WeatherConditionIcon
+                            condition={day.condition}
+                            title="Forecast"
+                          />
                           <div
                             className="f-temp-wrap"
                             style={{ fontSize: "11px" }}
@@ -267,7 +278,7 @@ export const WeatherSection: React.FC<Props> = ({ states }) => {
                       });
                       return (
                         <div
-                          key={i}
+                          key={hour.datetime || i}
                           className="hourly-item"
                           style={{
                             padding: "8px 4px",
@@ -282,35 +293,15 @@ export const WeatherSection: React.FC<Props> = ({ states }) => {
                           <div className="h-time" style={{ fontSize: "10px" }}>
                             {timeStr}
                           </div>
-                          <svg
-                            className="f-icon"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                          <WeatherConditionIcon
+                            condition={hour.condition}
+                            title="Hourly"
                             style={{
                               width: "20px",
                               height: "20px",
                               margin: "2px 0",
                             }}
-                          >
-                            <title>Hourly</title>
-                            {hour.condition.includes("rain") ? (
-                              <>
-                                <path d="M7 16a4 4 0 0 1-.88-7.9 6 6 0 0 1 11.76 0A4 4 0 0 1 17 16H7z" />
-                                <path d="M8 19v2m4-2v2m4-2v2" />
-                              </>
-                            ) : hour.condition.includes("cloud") ? (
-                              <path d="M7 16a4 4 0 0 1-.88-7.9 6 6 0 0 1 11.76 0A4 4 0 0 1 17 16H7z" />
-                            ) : (
-                              <>
-                                <circle cx="12" cy="12" r="4" />
-                                <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41M19.07 19.07l-1.41-1.41M6.34 6.34L4.93 4.93" />
-                              </>
-                            )}
-                          </svg>
+                          />
                           <div className="h-temp" style={{ fontSize: "13px" }}>
                             {hour.temperature}°
                           </div>

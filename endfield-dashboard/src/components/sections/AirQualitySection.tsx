@@ -16,6 +16,12 @@ export const AirQualitySection: React.FC<Props> = ({
   states,
   callHAService,
 }) => {
+  const pmValue = Number(states[ENTITY.PM25]?.state) || 0;
+  const badgeClass =
+    pmValue > 100 ? "badge-danger" : pmValue > 50 ? "badge-warn" : "badge-good";
+  const badgeText =
+    pmValue > 100 ? "HAZARDOUS" : pmValue > 50 ? "MODERATE" : "OPTIMAL";
+
   return (
     <section className="dashboard-section" id="sec-air">
       <div className="section-header bg-hazard-stripes">
@@ -145,7 +151,7 @@ export const AirQualitySection: React.FC<Props> = ({
                   <div className="entity-name">PM 2.5 Index</div>
                   <div className="entity-id">{ENTITY.PM25}</div>
                 </div>
-                <div className="tech-badge badge-good">OPTIMAL</div>
+                <div className={`tech-badge ${badgeClass}`}>{badgeText}</div>
               </div>
 
               <div className="metric-display">
@@ -157,7 +163,7 @@ export const AirQualitySection: React.FC<Props> = ({
 
               <div className="sparkline-wrap">
                 <svg className="sparkline-chart" viewBox="0 0 200 40">
-                  <title>Sparkline</title>
+                  <title>PM 2.5 Historical Trend (24h Baseline)</title>
                   <defs>
                     <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="#00FF9A" stopOpacity="0.4" />

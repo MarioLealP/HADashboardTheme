@@ -39,3 +39,9 @@ To maintain the Endfield aesthetic, adhere to the following principles:
 - **Primary Target**: Microsoft Surface Pro 3.
 - **Screen Specifications**: 12-inch display, 2160 x 1440 physical resolution, **3:2 Aspect Ratio**.
 - **Design Strategy**: Because the dashboard is built for a 3:2 landscape orientation, CSS layout must optimize for this aspect ratio (often effectively ~1440x960 or ~1080x720 depending on Windows OS scaling). Use CSS Grid to utilize the taller vertical space effectively (e.g., side-by-side modular sections rather than single-column vertical stacking, where possible) to minimize scrolling and create a true "HUD" dashboard feel.
+
+## 6. Deployment & CI/CD Knowledge
+
+- **Server OS / Infrastructure**: AlmaLinux with CosmoCloud.
+- **CI/CD Pipeline**: Automated deployment pipeline to build and host the Endfield Dashboard static bundle on the AlmaLinux server.
+

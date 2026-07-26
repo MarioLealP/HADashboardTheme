@@ -8,33 +8,53 @@ interface Props {
   states: HAStatesMap;
 }
 
+interface CalendarEvent {
+  id: string;
+  title: string;
+  description: string;
+  startTime: Date;
+  endTime: Date;
+  allDay: boolean;
+  isActive: boolean;
+}
+
 export const CalendarSection: React.FC<Props> = ({ states }) => {
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 
   // Extract the single "next" event from each calendar entity available in states
-  const upcomingEvents = ENTITY.CALENDARS.map((calId) => {
-    const stateObj = states[calId];
-    if (stateObj?.attributes?.message) {
-      return {
-        id: calId,
-        title: stateObj.attributes.message,
-        description:
-          stateObj.attributes.description || "No description provided.",
-        startTime: new Date(stateObj.attributes.start_time),
-        endTime: new Date(stateObj.attributes.end_time),
-        allDay: stateObj.attributes.all_day || false,
-        isActive: stateObj.state === "on",
-      };
-    }
-    return null;
-  })
-    .filter((e) => e !== null)
-    .sort((a, b) => a?.startTime.getTime() - b?.startTime.getTime());
+  const upcomingEvents: CalendarEvent[] = ENTITY.CALENDARS.map(
+    (calId: string) => {
+      const stateObj = states[calId];
+      if (stateObj?.attributes?.message) {
+        return {
+          id: calId,
+          title: stateObj.attributes.message,
+          description:
+            stateObj.attributes.description || "No description provided.",
+          startTime: new Date(stateObj.attributes.start_time || 0),
+          endTime: new Date(stateObj.attributes.end_time || 0),
+          allDay: stateObj.attributes.all_day || false,
+          isActive: stateObj.state === "on",
+        };
+      }
+      return null;
+    },
+  )
+    .filter((e: CalendarEvent | null): e is CalendarEvent => e !== null)
+    .sort(
+      (a: CalendarEvent, b: CalendarEvent) =>
+        a.startTime.getTime() - b.startTime.getTime(),
+    );
 
   const finalEvents = upcomingEvents;
 
   // Generate days for grid view based on today
   const today = new Date();
+  const todayStart = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+  );
   const days = Array.from({ length: 7 }).map((_, i) => {
     const d = new Date(today);
     d.setDate(today.getDate() + i);
@@ -105,7 +125,7 @@ export const CalendarSection: React.FC<Props> = ({ states }) => {
                       NO UPCOMING LOGISTICS RECORDED.
                     </div>
                   ) : (
-                    finalEvents.map((ev, idx) => {
+                    finalEvents.map((ev: CalendarEvent, idx: number) => {
                       const hourStr = ev?.allDay
                         ? "ALL DAY"
                         : ev?.startTime.toLocaleTimeString("en-US", {
@@ -124,8 +144,8 @@ export const CalendarSection: React.FC<Props> = ({ states }) => {
 
                       return (
                         <div
-                          className={`schedule-item ${!ev?.isActive ? (ev?.startTime < today ? "inactive" : "") : ""}`}
-                          key={idx}
+                          className={`schedule-item ${!ev?.isActive ? (ev?.startTime < todayStart ? "inactive" : "") : ""}`}
+                          key={ev?.id || idx}
                         >
                           <div className="schedule-time">
                             <span className="s-hour">{hourStr}</span>
@@ -170,9 +190,8 @@ export const CalendarSection: React.FC<Props> = ({ states }) => {
                 <div className="schedule-grid-view day-columns-layout">
                   {days.map((d) => {
                     const dayEvents = finalEvents.filter(
-                      (e) =>
-                        e?.startTime.toDateString() ===
-                        d.dateObj.toDateString(),
+                      (e: CalendarEvent) =>
+                        e.startTime.toDateString() === d.dateObj.toDateString(),
                     );
 
                     return (
@@ -182,10 +201,10 @@ export const CalendarSection: React.FC<Props> = ({ states }) => {
                           className="grid-cell day-events-cell"
                           style={{ flex: 1 }}
                         >
-                          {dayEvents.map((ev, idx) => (
+                          {dayEvents.map((ev: CalendarEvent, idx: number) => (
                             <div
                               className={`grid-event ${ev?.isActive ? "pending" : ""}`}
-                              key={idx}
+                              key={ev?.id || idx}
                             >
                               <span className="ev-time">
                                 {ev?.allDay

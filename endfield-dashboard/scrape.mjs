@@ -4,11 +4,10 @@ import puppeteer from "puppeteer";
 
 (async () => {
   console.log("Launching browser...");
-  const browser = await puppeteer.launch({ headless: "new" });
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
-  const publicDir =
-    "H:/Projects/HADashboardTheme/endfield-dashboard/public/models";
+  const publicDir = path.resolve(import.meta.dirname, "public/models");
   if (!fs.existsSync(publicDir)) {
     fs.mkdirSync(publicDir, { recursive: true });
   }
@@ -60,7 +59,9 @@ import puppeteer from "puppeteer";
         await btn.click();
         await new Promise((r) => setTimeout(r, 2500)); // wait for model to load
       }
-    } catch (_e) {}
+    } catch (e) {
+      console.debug("Button click skipped:", e.message);
+    }
   }
 
   await browser.close();
