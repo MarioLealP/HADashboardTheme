@@ -16,20 +16,32 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} ."
+                dir('endfield-dashboard') {
+                    sh """
+                        docker build \
+                            -t ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} \
+                            -t ${REGISTRY}/${IMAGE_NAME}:${env.BRANCH_NAME ?: 'latest'} \
+                            .
+                    """
+                }
             }
         }
 
         stage('Push to Artifact Registry') {
             steps {
-                sh "docker push ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+                dir('endfield-dashboard') {
+                    sh """
+                        docker push ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
+                        docker push ${REGISTRY}/${IMAGE_NAME}:${env.BRANCH_NAME ?: 'latest'}
+                    """
+                }
             }
         }
     }
 
     post {
         success {
-            echo "Image ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} pushed! Watchtower will auto-update production in < 60s."
+            echo "Image ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} (and branch tag: ${env.BRANCH_NAME ?: 'latest'}) pushed! Watchtower will auto-update production."
         }
         failure {
             echo 'Pipeline failed. Check build logs.'
