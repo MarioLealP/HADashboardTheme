@@ -1,0 +1,31 @@
+services:
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea-server
+    restart: unless-stopped
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__server__ROOT_URL=https://git.clockmost.com
+      - GITEA__server__DOMAIN=git.clockmost.com
+      - GITEA__server__SSH_PORT=2222
+    ports:
+      - "3000:3000"
+      - "2222:22"
+    volumes:
+      - ./gitea_data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+  act_runner:
+    image: gitea/act_runner:latest
+    container_name: gitea-act-runner
+    restart: unless-stopped
+    depends_on:
+      - gitea
+    environment:
+      - GITEA_INSTANCE_URL=http://gitea-server:3000
+      - GITEA_RUNNER_REGISTRATION_TOKEN=${RUNNER_TOKEN:-}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./runner_data:/data
