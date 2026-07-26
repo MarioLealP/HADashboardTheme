@@ -6,6 +6,9 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
+# Build args injected by Gitea Actions secrets at build time
+ARG VITE_HA_URL
+ARG VITE_HA_TOKEN
 RUN npm run build
 
 # Stage 2: Serve static bundle with lightweight Nginx

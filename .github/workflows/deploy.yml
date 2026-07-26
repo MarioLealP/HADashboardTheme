@@ -11,8 +11,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build and Push Docker Image
+      - name: Build Docker Image with HA Secrets
         run: |
           cd endfield-dashboard
-          docker build -t localhost:5000/endfield-dashboard:latest .
+          docker build \
+            --build-arg VITE_HA_URL=${{ secrets.HA_URL }} \
+            --build-arg VITE_HA_TOKEN=${{ secrets.HA_TOKEN }} \
+            -t localhost:5000/endfield-dashboard:latest .
+
+      - name: Push to Local Registry
+        run: |
           docker push localhost:5000/endfield-dashboard:latest
