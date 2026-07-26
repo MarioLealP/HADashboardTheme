@@ -508,6 +508,10 @@ body.endfield-dark {
   gap: 20px;
 }
 
+#sec-lighting .cards-grid {
+  grid-template-columns: repeat(3, minmax(320px, 1fr));
+}
+
 #sec-air .cards-grid,
 #sec-weather .cards-grid,
 #sec-calendar .cards-grid {

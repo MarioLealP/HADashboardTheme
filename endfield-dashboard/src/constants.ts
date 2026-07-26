@@ -1,5 +1,5 @@
 export const ENTITY = {
-  MAIN_LIGHT: import.meta.env.VITE_ENTITY_MAIN_LIGHT || "light.main_room",
+  MAIN_LIGHT: import.meta.env.VITE_ENTITY_MAIN_LIGHT || "light.chandelure",
   SHELF_SWITCH: import.meta.env.VITE_ENTITY_SHELF_SWITCH || "switch.shelf",
   SHELF_POWER: import.meta.env.VITE_ENTITY_SHELF_POWER || "sensor.shelf_power",
   PLUG_SWITCH: import.meta.env.VITE_ENTITY_PLUG_SWITCH || "switch.aux_plug",

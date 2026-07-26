@@ -131,7 +131,12 @@ export const LightingSection: React.FC<Props> = ({ states, callHAService }) => {
 
         <article className="ef-card switch-card bg-dot-matrix">
           <div
-            className={`ef-accent-bar ${states[ENTITY.SHELF_SWITCH]?.state === "on" ? "active" : ""}`}
+            className={`ef-accent-bar ${
+              states[ENTITY.SHELF_SWITCH]?.state === "on" ||
+              states[ENTITY.PLUG_SWITCH]?.state === "on"
+                ? "active"
+                : ""
+            }`}
           >
             <div className="bar-pink"></div>
             <div className="bar-green"></div>
@@ -141,7 +146,7 @@ export const LightingSection: React.FC<Props> = ({ states, callHAService }) => {
             <div className="card-top">
               <div className="icon-box">
                 <svg className="entity-icon" viewBox="0 0 24 24">
-                  <title>Switch</title>
+                  <title>Switches</title>
                   <path
                     fill="currentColor"
                     d="M17 7H7A5 5 0 0 0 2 12A5 5 0 0 0 7 17H17A5 5 0 0 0 22 12A5 5 0 0 0 17 7M7 15A3 3 0 0 1 4 12A3 3 0 0 1 7 9A3 3 0 0 1 10 12A3 3 0 0 1 7 15Z"
@@ -149,81 +154,120 @@ export const LightingSection: React.FC<Props> = ({ states, callHAService }) => {
                 </svg>
               </div>
               <div className="entity-info">
-                <div className="entity-name">Shelf Power Switch</div>
-                <div className="entity-id">{ENTITY.SHELF_SWITCH}</div>
+                <div className="entity-name">Consumption Switches</div>
+                <div className="entity-id">SHELF & AUX PLUG</div>
               </div>
-              <label className="ef-switch">
-                <input
-                  type="checkbox"
-                  checked={states[ENTITY.SHELF_SWITCH]?.state === "on"}
-                  onChange={(e) =>
-                    callHAService(
-                      "switch",
-                      e.target.checked ? "turn_on" : "turn_off",
-                      { entity_id: ENTITY.SHELF_SWITCH },
-                    )
-                  }
-                />
-                <span className="slider"></span>
-              </label>
             </div>
 
-            <div className="card-sensor-row">
-              <span className="sensor-label">LIVE CONSUMPTION:</span>
-              <span className="sensor-value">
-                {states[ENTITY.SHELF_POWER]?.state || "0.0"} W
-              </span>
-            </div>
-          </div>
-        </article>
-
-        <article className="ef-card switch-card bg-dot-matrix">
-          <div
-            className={`ef-accent-bar ${states[ENTITY.PLUG_SWITCH]?.state === "on" ? "active" : ""}`}
-          >
-            <div className="bar-pink"></div>
-            <div className="bar-green"></div>
-            <div className="bar-yellow"></div>
-          </div>
-          <div className="card-inner">
-            <div className="card-top">
-              <div className="icon-box">
-                <svg className="entity-icon" viewBox="0 0 24 24">
-                  <title>Plug</title>
-                  <path
-                    fill="currentColor"
-                    d="M16 7V3H14V7H10V3H8V7H7A2 2 0 0 0 5 9V14.5L8.5 18V21H15.5V18L19 14.5V9A2 2 0 0 0 17 7H16Z"
+            <div
+              className="card-controls"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingBottom: "8px",
+                  borderBottom: "1px solid rgba(255,255,255,0.08)",
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      color: "#fff",
+                    }}
+                  >
+                    Shelf Power
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontFamily: "var(--font-mono)",
+                      color: "var(--clr-green, #4ade80)",
+                      marginTop: "2px",
+                    }}
+                  >
+                    {states[ENTITY.SHELF_POWER]?.state || "0.0"} W
+                  </div>
+                </div>
+                <label className="ef-switch">
+                  <input
+                    type="checkbox"
+                    checked={states[ENTITY.SHELF_SWITCH]?.state === "on"}
+                    onChange={(e) =>
+                      callHAService(
+                        "switch",
+                        e.target.checked ? "turn_on" : "turn_off",
+                        { entity_id: ENTITY.SHELF_SWITCH },
+                      )
+                    }
                   />
-                </svg>
+                  <span className="slider"></span>
+                </label>
               </div>
-              <div className="entity-info">
-                <div className="entity-name">Auxiliary Plug</div>
-                <div className="entity-id">{ENTITY.PLUG_SWITCH}</div>
-              </div>
-              <label className="ef-switch">
-                <input
-                  type="checkbox"
-                  checked={states[ENTITY.PLUG_SWITCH]?.state === "on"}
-                  onChange={(e) =>
-                    callHAService(
-                      "switch",
-                      e.target.checked ? "turn_on" : "turn_off",
-                      { entity_id: ENTITY.PLUG_SWITCH },
-                    )
-                  }
-                />
-                <span className="slider"></span>
-              </label>
-            </div>
 
-            <div className="card-sensor-row">
-              <span className="sensor-label">LIVE CONSUMPTION:</span>
-              <span className="sensor-value">
-                {states[ENTITY.PLUG_POWER]?.state || "0.0"} W
-              </span>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      color: "#fff",
+                    }}
+                  >
+                    Auxiliary Plug
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontFamily: "var(--font-mono)",
+                      color: "var(--clr-green, #4ade80)",
+                      marginTop: "2px",
+                    }}
+                  >
+                    {states[ENTITY.PLUG_POWER]?.state || "0.0"} W
+                  </div>
+                </div>
+                <label className="ef-switch">
+                  <input
+                    type="checkbox"
+                    checked={states[ENTITY.PLUG_SWITCH]?.state === "on"}
+                    onChange={(e) =>
+                      callHAService(
+                        "switch",
+                        e.target.checked ? "turn_on" : "turn_off",
+                        { entity_id: ENTITY.PLUG_SWITCH },
+                      )
+                    }
+                  />
+                  <span className="slider"></span>
+                </label>
+              </div>
             </div>
           </div>
         </article>
+
+        {/* Empty 3rd slot to preserve 3-column grid */}
+        <div
+          style={{
+            visibility: "hidden",
+            pointerEvents: "none",
+            minHeight: "1px",
+          }}
+        />
       </div>
     </section>
   );
