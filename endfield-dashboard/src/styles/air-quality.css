@@ -1,0 +1,99 @@
+/* ── Air Quality Unified Card ──────────────────────────────── */
+.air-quality-inner {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+.air-col-left,
+.air-col-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.air-divider {
+  width: 1px;
+  background: var(--clr-card-border);
+  margin: 12px 0;
+}
+
+/* Metric Display & Sparkline */
+.metric-display {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.metric-big {
+  font-family: var(--font-mono);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--clr-green);
+}
+
+.metric-unit {
+  font-size: 12px;
+  color: var(--clr-text-muted);
+}
+
+.tech-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+}
+
+.badge-good {
+  background: rgba(0, 255, 154, 0.15);
+  color: var(--clr-green);
+  border: 1px solid var(--clr-green);
+}
+
+.sparkline-wrap {
+  width: 100%;
+  height: 40px;
+  margin-top: 4px;
+}
+
+.sparkline-chart {
+  width: 100%;
+  height: 100%;
+}
+
+/* Progress bar gauge */
+.progress-bar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--clr-text-muted);
+}
+
+.progress-pct {
+  color: var(--clr-primary);
+  font-weight: 700;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: #252525;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--clr-green), var(--clr-primary));
+  transition: width 0.4s ease;
+}

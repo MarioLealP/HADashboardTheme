@@ -1,0 +1,24 @@
+:root {
+  --clr-bg-void: #101010;
+  --clr-card-bg: rgba(25, 25, 25, 0.92);
+  --clr-card-border: #2a2a2a;
+  --clr-card-hover-border: #fffa00;
+
+  /* Endfield Signature Accent Colors */
+  --clr-primary: #fffa00; /* Endfield Neon Yellow */
+  --clr-pink: #e5007f; /* Tactical Pink */
+  --clr-green: #00ff9a; /* Cyber Cyan / Green */
+  --clr-link: #1a6fbf; /* Industrial Blue */
+
+  /* Muted Monochromes */
+  --clr-text-white: #ffffff;
+  --clr-text-light: #f2f2f2;
+  --clr-text-muted: #6e6e6e;
+  --clr-text-dark: #101010;
+
+  /* Typography */
+  --font-sans: "SDK-Sans-Regular", "Inter", sans-serif;
+  --font-bold: "SDK-Sans-Bold", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", "Consolas", monospace;
+  --font-display: "Novecentosanswide-Bold", sans-serif;
+}

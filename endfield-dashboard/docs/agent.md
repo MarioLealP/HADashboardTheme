@@ -44,4 +44,3 @@ To maintain the Endfield aesthetic, adhere to the following principles:
 
 - **Server OS / Infrastructure**: AlmaLinux with CosmoCloud.
 - **CI/CD Pipeline**: Automated deployment pipeline to build and host the Endfield Dashboard static bundle on the AlmaLinux server.
-

@@ -1,0 +1,455 @@
+/* ─────────────────────────────────────────────────────────────
+   ENDFIELD INDUSTRIES // Home Assistant Dashboard Stylesheet
+   Inspired by Arknights: Endfield visual language & lib.typ
+   ───────────────────────────────────────────────────────────── */
+
+@font-face {
+  font-family: "SDK-Sans-Regular";
+  src: url(https://web-static.hg-cdn.com/gl_web_sdk/assets/SourceHanSans-Regular.a3fa7030779f47fa5b5f.woff)
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "SDK-Sans-Bold";
+  src: url(https://web-static.hg-cdn.com/gl_web_sdk/assets/SourceHanSans-Bold.70a158c7edb8c734e449.woff)
+    format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Novecentosanswide-Bold";
+  src: url(https://web-static.hg-cdn.com/endfield/official-v4/_next/static/media/Novecentosanswide-Bold.woff2)
+    format("woff2");
+  font-weight: bold;
+}
+
+/* Endfield Patterns */
+.bg-dot-matrix {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.15) 1px,
+    transparent 1px
+  );
+  background-size: 1.5em 1.5em;
+}
+
+.bg-hazard-stripes {
+  background-image: linear-gradient(
+    -45deg,
+    transparent,
+    transparent 18.3%,
+    rgba(255, 250, 0, 0.1) 0,
+    rgba(255, 250, 0, 0.1) 31.6%,
+    transparent 0,
+    transparent 68.3%,
+    rgba(255, 250, 0, 0.1) 0,
+    rgba(255, 250, 0, 0.1) 81.6%,
+    transparent 0,
+    transparent
+  );
+  background-size: 0.5rem 0.5rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.endfield-dark {
+  background-color: var(--clr-bg-void);
+  color: var(--clr-text-white);
+  font-family: var(--font-sans);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Topographic Contour Background ────────────────────────── */
+.contour-bg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.contour-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.12;
+  filter: invert(1) brightness(1.2);
+}
+
+.grid-scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(rgba(255, 250, 1, 0.03) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* ── HUD Corner Brackets ────────────────────────────────────── */
+.hud-bracket {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 24px;
+  color: var(--clr-primary);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.hud-bracket.top-left {
+  top: 20px;
+  left: 20px;
+}
+.hud-bracket.top-right {
+  top: 20px;
+  right: 20px;
+}
+.hud-bracket.bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+.hud-bracket.bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
+/* ── Main Layout (Unscrollable HUD) ────────────────────────── */
+.endfield-dashboard-grid {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 40px 60px;
+  display: grid;
+  flex: 1;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "lighting lighting"
+    "air weather"
+    "calendar .";
+  gap: 48px;
+  overflow: hidden;
+}
+
+#sec-lighting {
+  grid-area: lighting;
+}
+
+#sec-air {
+  grid-area: air;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#sec-weather {
+  grid-area: weather;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#sec-calendar {
+  grid-area: calendar;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+#sec-lighting .cards-grid {
+  grid-template-columns: repeat(3, minmax(320px, 1fr));
+}
+
+#sec-air .cards-grid,
+#sec-weather .cards-grid,
+#sec-calendar .cards-grid {
+  flex: 1;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#sec-air .cards-grid::-webkit-scrollbar,
+#sec-weather .cards-grid::-webkit-scrollbar,
+#sec-calendar .cards-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Typography & Tags ─────────────────────────────────────── */
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--clr-card-border);
+  padding-bottom: 8px;
+}
+
+.section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sec-index {
+  color: var(--clr-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.sec-title {
+  font-size: 16px;
+  font-family: var(--font-bold);
+  letter-spacing: 1.5px;
+  color: var(--clr-text-white);
+  text-transform: uppercase;
+}
+
+.sec-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--clr-text-muted);
+  background: rgba(40, 40, 40, 0.6);
+  padding: 2px 8px;
+  border-radius: 2px;
+}
+
+/* ── Card Component with Endfield Tri-Color Bar ────────────── */
+.ef-card {
+  position: relative;
+  background: var(--clr-card-bg);
+  border: 1px solid var(--clr-card-border);
+  border-radius: 2px;
+  display: flex;
+  overflow: hidden;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+  backdrop-filter: blur(8px);
+}
+
+/* The iconic multi-color vertical bar on the left of each card */
+.ef-accent-bar {
+  width: 5px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.ef-accent-bar:not(.active) {
+  background: #333333;
+}
+
+.ef-accent-bar.active .bar-pink {
+  height: 18%;
+  background: var(--clr-pink);
+}
+.ef-accent-bar.active .bar-green {
+  height: 18%;
+  background: var(--clr-green);
+}
+.ef-accent-bar.active .bar-yellow {
+  flex: 1;
+  background: var(--clr-primary);
+  box-shadow: 0 0 10px rgba(255, 250, 0, 0.4);
+}
+
+.ef-accent-bar:not(.active) .bar-pink,
+.ef-accent-bar:not(.active) .bar-green,
+.ef-accent-bar:not(.active) .bar-yellow {
+  display: none;
+}
+
+.card-inner {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-box {
+  width: 38px;
+  height: 38px;
+  background: rgba(35, 35, 35, 0.8);
+  border: 1px solid #3a3a3a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--clr-primary);
+  border-radius: 2px;
+}
+
+.entity-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.entity-info {
+  flex: 1;
+}
+
+.entity-name {
+  font-family: var(--font-bold);
+  font-size: 14px;
+  color: var(--clr-text-white);
+}
+
+.entity-id {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--clr-text-muted);
+}
+
+/* ── Modal Overlay ─────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-card {
+  background: #161616;
+  border: 1px solid var(--clr-primary);
+  width: 100%;
+  max-width: 480px;
+  border-radius: 2px;
+  box-shadow: 0 0 30px rgba(255, 250, 1, 0.15);
+  overflow: hidden;
+}
+
+.modal-header {
+  background: #111111;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.modal-header h3 {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--clr-primary);
+  letter-spacing: 1px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--clr-text-muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: var(--clr-text-white);
+}
+
+.modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-desc {
+  font-size: 12px;
+  color: var(--clr-text-light);
+  line-height: 1.5;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--clr-text-muted);
+}
+
+.tech-input {
+  background: #0f0f0f;
+  border: 1px solid #333333;
+  color: var(--clr-text-white);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 10px 12px;
+  border-radius: 2px;
+  outline: none;
+}
+
+.tech-input:focus {
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 10px rgba(255, 250, 1, 0.2);
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.form-actions .tech-btn {
+  flex: 1;
+  justify-content: center;
+}

@@ -26,6 +26,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # custom folders
-/Arknights Endfield Tools & Database _ EndfieldTools.DEV_files
-/Arknights_ Endfield - Over the Frontier, Into the Front_files
-/Arknights_ Endfield - Over the Frontier, Into the Front2_files
+reference/saved-pages/Arknights Endfield Tools & Database _ EndfieldTools.DEV_files
+reference/saved-pages/Arknights_ Endfield - Over the Frontier, Into the Front_files
+reference/saved-pages/Arknights_ Endfield - Over the Frontier, Into the Front2_files
